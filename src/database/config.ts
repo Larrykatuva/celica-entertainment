@@ -6,6 +6,7 @@ import {
 
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Country } from '../settings/entities/country.entity';
 
 @Injectable()
 class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -18,7 +19,7 @@ class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.configService.get<string>('DATABASE_USER'),
       password: this.configService.get<string>('DATABASE_PASSWORD'),
       database: this.configService.get<string>('DATABASE_NAME'),
-      entities: [],
+      entities: [Country],
       synchronize: this.configService.get<boolean>('DATABASE_SYNC'),
       logging: this.configService.get<boolean>('LOGGER'),
       subscribers: [],
