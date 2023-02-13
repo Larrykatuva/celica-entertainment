@@ -14,6 +14,7 @@ import { Order } from './order.entity';
 export enum OrderStats {
   PAID = 'PAID',
   USED = 'USED',
+  EXPIRED = 'EXPIRED',
   CANCELLED = 'CANCELLED',
   REVOKED = 'REVOKED',
 }
