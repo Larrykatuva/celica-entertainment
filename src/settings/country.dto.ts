@@ -18,3 +18,26 @@ export class CountryDto {
   @IsNotEmpty()
   timezone: string;
 }
+
+export class CountryResponse {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  currency: string;
+
+  @ApiProperty()
+  code: string;
+
+  @ApiProperty()
+  timezone: string;
+
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  updatedAt: Date;
+}

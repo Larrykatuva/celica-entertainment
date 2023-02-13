@@ -47,13 +47,25 @@ export class CountryService {
   }
 
   async updateCountry(
-    filterOptions: Partial<Country>,
+    filterOptions: any,
     updateFields: CountryDto,
   ): Promise<UpdateResult> {
     return await this.countryRepository.update(
       { ...filterOptions },
       { ...updateFields },
     );
+  }
+
+  async updateCountryById(
+    id: string,
+    country: Partial<Country>,
+  ): Promise<UpdateResult> {
+    if (!(await this.getCountry({ id: id })))
+      throw new HttpException(
+        'Country matching the id does not exist',
+        HttpStatus.BAD_REQUEST,
+      );
+    return await this.countryRepository.update({ id: id }, { ...country });
   }
 
   async deleteCountry(filterOptions: Partial<Country>): Promise<DeleteResult> {

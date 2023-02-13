@@ -5,14 +5,43 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
-import { Request, Response } from 'express';
+import { Request } from 'express';
+import { PaginatedResponse } from '../dto/pagination.dto';
 
-export interface PaginatedResponse<T> {
-  data: T;
-}
+const preparePreviousUrlLink = (
+  request: Request,
+  url: string,
+): string | null => {
+  const {
+    query: { offset = 0, limit = 10 },
+  } = request;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  if (offset - limit < 0 || offset == 0) return null;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const previousOffset = offset - limit;
+  return `${url}?limit=${limit}&offset=${previousOffset}`;
+};
+
+const prepareNextUrlLink = (
+  request: Request,
+  count: number,
+  url: string,
+): string | null => {
+  const {
+    query: { offset = 0, limit = 10 },
+  } = request;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  let nextOffset = parseInt(offset) + parseInt(limit);
+  console.log(nextOffset, count);
+  if (nextOffset > count) nextOffset = count;
+  return `${url}?limit=${limit}&offset=${nextOffset}`;
+};
 
 @Injectable()
-export class TransformInterceptor<T>
+export class PaginationInterceptor<T>
   implements NestInterceptor<T, PaginatedResponse<T>>
 {
   intercept(
@@ -20,8 +49,14 @@ export class TransformInterceptor<T>
     next: CallHandler,
   ): Observable<PaginatedResponse<T>> {
     const request = context.switchToHttp().getRequest<Request>();
-    const response = context.switchToHttp().getResponse<Response>();
-    console.log(response);
-    return next.handle().pipe(map((data) => ({ data })));
+    const relativeUrl = request.route.path;
+    return next.handle().pipe(
+      map((data) => ({
+        count: data[1],
+        next: prepareNextUrlLink(request, data[1], relativeUrl),
+        previous: preparePreviousUrlLink(request, relativeUrl),
+        data: data[0],
+      })),
+    );
   }
 }
