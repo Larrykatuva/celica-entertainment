@@ -12,6 +12,10 @@ export class CountryService {
     private readonly countryRepository: Repository<Country>,
   ) {}
 
+  /**
+   * Create a country if it does not exist.
+   * @param country
+   */
   async createCountry(country: CountryDto): Promise<Country> {
     if (
       await this.countryRepository.findOneBy({
@@ -23,6 +27,14 @@ export class CountryService {
     return await this.countryRepository.save(country);
   }
 
+  /**
+   * Get a paginated list of countries.
+   * Can also join optional tables which are passed as an object.
+   * @param ordering
+   * @param pagination
+   * @param filterOptions
+   * @param relations
+   */
   async filterCounties(
     ordering: any,
     pagination: PaginationInterface = { skip: 0, take: 10 },
@@ -36,6 +48,12 @@ export class CountryService {
     });
   }
 
+  /**
+   * Get a country by filter options.
+   * Can also join optional tables which are passed as an object.
+   * @param filterOptions
+   * @param relations
+   */
   async getCountry(
     filterOptions: Partial<Country>,
     relations?: any,
@@ -46,6 +64,11 @@ export class CountryService {
     });
   }
 
+  /**
+   * Update country matching filter options by update fields.
+   * @param filterOptions
+   * @param updateFields
+   */
   async updateCountry(
     filterOptions: any,
     updateFields: CountryDto,
@@ -56,6 +79,11 @@ export class CountryService {
     );
   }
 
+  /**
+   * Update country by id.
+   * @param id
+   * @param country
+   */
   async updateCountryById(
     id: string,
     country: Partial<Country>,
