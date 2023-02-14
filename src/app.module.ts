@@ -3,6 +3,7 @@ import DatabaseConfig from './database/config';
 import { ConfigModule } from '@nestjs/config';
 import { OrganizerModule } from './organizer/organizer.module';
 import { SettingsModule } from './settings/settings.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { SettingsModule } from './settings/settings.module';
     DatabaseConfig,
     OrganizerModule,
     SettingsModule,
+    AuthenticationModule,
   ],
   controllers: [],
   providers: [],

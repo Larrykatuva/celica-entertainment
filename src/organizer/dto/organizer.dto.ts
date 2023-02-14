@@ -17,4 +17,8 @@ export class CreateOrganizerDto {
   @ApiProperty()
   @IsNotEmpty()
   address: string;
+
+  @ApiProperty({ type: 'string', format: 'binary' })
+  @IsNotEmpty()
+  logo: any;
 }

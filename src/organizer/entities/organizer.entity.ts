@@ -33,6 +33,9 @@ export class Organizer {
   isActive: boolean;
 
   @Column({ default: false })
+  isKyc: boolean;
+
+  @Column({ default: false })
   isBanned: boolean;
 
   @Column()
